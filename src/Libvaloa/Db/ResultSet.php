@@ -53,6 +53,11 @@ class ResultSet implements Iterator
      */
     private $rows = array();
 
+    /**
+     * Results in ResultSet
+     * 
+     * @var int
+     */
     private $recordCount = 0;
 
     /**
@@ -131,6 +136,8 @@ class ResultSet implements Iterator
     }
 
     /**
+     * Set value for query parameter.
+     * 
      * @param $value
      * @param bool $key
      * @param PDO::PARAM $type
@@ -151,6 +158,8 @@ class ResultSet implements Iterator
     }
 
     /**
+     * Bind value for query parameter.
+     * 
      * @param $value
      * @param bool $key
      * @param PDO::PARAM $type
@@ -256,9 +265,9 @@ class ResultSet implements Iterator
     }
 
     /**
-     * @return int|mixed
+     * @return int
      */
-    public function key()
+    public function key() : int
     {
         return $this->index;
     }
@@ -266,7 +275,7 @@ class ResultSet implements Iterator
     /**
      * @return bool|void
      */
-    public function next()
+    public function next() : bool
     {
         if ($this->index < $this->recordCount) {
             $this->index++;
@@ -297,7 +306,7 @@ class ResultSet implements Iterator
     /**
      * @return bool
      */
-    public function valid()
+    public function valid() : bool
     {
         return isset($this->rows[$this->index]);
     }
@@ -305,7 +314,7 @@ class ResultSet implements Iterator
     /**
      * @return int
      */
-    public function rowCount()
+    public function rowCount() : int
     {
         return $this->stmt->rowCount();
     }
