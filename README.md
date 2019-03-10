@@ -1,4 +1,4 @@
-libvaloa - NORM (Not an ORM) database component
+libvaloa - database component
 ========
 
 [![webvaloa](https://github.com/sundflux/libvaloa/blob/master/.vendor.png)](https://github.com/sundflux/libvaloa/blob/master/.vendor.png)
@@ -6,8 +6,6 @@ libvaloa - NORM (Not an ORM) database component
 Libvaloa is a set of standalone open source utility libraries, which make base for Webvaloa platform. All Libvaloa components aim for quality code, modern design patterns, good documentation and highest possible security. All Libvaloa components are licensed with permissive MIT license.
 
 This package adds minimal abstraction layer for PDO connections. The original design goal of libvaloa-db was to work as drop-in PDO-based replacement for AdoDB query API, but now it offers minimal abstraction for PDO and few utilities for common database tasks. 
-
-It is Not an ORM.
 
 http://libvaloa.webvaloa.com/
 
