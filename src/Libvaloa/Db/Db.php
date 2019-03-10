@@ -119,6 +119,7 @@ class Db
             throw new RuntimeException('Selected database type is not supported by PDO or PHP is not compiled with the appropriate driver (see www.php.net/pdo).');
         }
 
+        // Server specific connectstrings
         switch ($dbconn) {
             case 'mysql':
                 $dsn = "mysql:host={$server};dbname={$database}";
@@ -137,6 +138,8 @@ class Db
         }
 
         $attr = array();
+
+        // Persistent connections
         $attr[PDO::ATTR_PERSISTENT] = (bool) $pconn;
 
         if ($dbconn === 'mysql' && !empty($initquery)) {
@@ -274,7 +277,7 @@ class Db
     }
 
     /**
-     *
+     * Begin transaction
      */
     public function beginTrans()
     {
@@ -282,15 +285,17 @@ class Db
     }
 
     /**
-     * @param bool $ok
+     * Commit transaction
+     * 
+     * @param bool $commitTransaction
      */
-    public function commitTrans($ok = true)
+    public function commitTrans($commitTransaction = true)
     {
-        $this->commit($ok);
+        $this->commit($commitTransaction);
     }
 
     /**
-     *
+     * Rollback transaction
      */
     public function rollBackTrans()
     {
@@ -301,7 +306,7 @@ class Db
      * Begins database transaction if database supports it.
      *
      *
-     * @uses   Common_Exception
+     * @uses   RuntimeException
      */
     public function beginTransaction()
     {
@@ -317,16 +322,17 @@ class Db
      * Commits transaction started with beginTrans().
      *
      *
-     * @param bool $ok If false, method automatically calls rollBack() and transaction is not committed
+     * @param bool $commitTransaction If false, method automatically calls rollBack() and transaction is not committed
+     * @uses RuntimeException
      */
-    public function commit($ok = true)
+    public function commit($commitTransaction = true)
     {
         if ($this->transcnt < 1) {
             return;
         }
 
         try {
-            if (!$ok) {
+            if (!$commitTransaction) {
                 $this->conn->rollBack();
             } else {
                 $this->conn->commit();
@@ -339,6 +345,9 @@ class Db
 
     /**
      * Cancels transaction started with beginTrans().
+     * 
+     * @uses RuntimeException
+     * @uses LogicException
      */
     public function rollBack()
     {
