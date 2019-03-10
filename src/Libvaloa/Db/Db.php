@@ -1,16 +1,46 @@
 <?php
 
+namespace Libvaloa\Db;
+
+use PDO;
+use RuntimeException;
+use DomainException;
+use OutOfBoundsException;
+use LogicException;
+
 /**
- * The Initial Developer of the Original Code is
- * Joni Halme <jontsa@amigaone.cc>.
+ * Libvaloa Database Component
+ * 
+ * This package adds minimal abstraction layer for PDO connections. The original 
+ * design goal of libvaloa-db was to work as drop-in PDO-based replacement for 
+ * AdoDB query API, but now it offers minimal abstraction for PDO and 
+ * few utilities for common database tasks. 
+ * 
+ * ---
+ * 
+ * Quick start guide:
+ * 
+ * <pre>
+ * // Initialize DB connection:
+ * $db = new \Libvaloa\Db\Db($host, $user, $password, $database, "mysql");
+ * </pre>
  *
- * Portions created by the Initial Developer are
- * Copyright (C) 2006 Joni Halme <jontsa@amigaone.cc>
- *
- * All Rights Reserved.
- *
- * Contributor(s):
- * 2008,2013,2018,2019 Tarmo Alexander Sundström <ta@sundstrom.io>
+ * Perform a query:
+ *  
+ * <pre>
+ * $stmt = $db->prepare("SELECT id, column FROM table");
+ * $results = $db->execute();
+ * </pre>
+ * 
+ * Loop through results:
+ * 
+ * <pre>
+ * foreach ($results as $row) {
+ *     echo $row->column;
+ * }
+ * </pre>
+ * 
+ * ---
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -29,18 +59,14 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  * IN THE SOFTWARE.
- */
-namespace Libvaloa\Db;
-
-use PDO;
-use RuntimeException;
-use DomainException;
-use OutOfBoundsException;
-use LogicException;
-
-/**
- * Class Db
+ * 
+ * 
  * @package Libvaloa\Db
+ * @url https://github.com/sundflux/libvaloa-db
+ * @copyright Copyright 2010 - 2019 (c) webvaloa.com
+ * @author Tarmo Alexander Sundström <ta@sundstrom.io>
+ * @author Joni Halme <jontsa@amigaone.cc>
+ * @license MIT
  */
 class Db
 {
