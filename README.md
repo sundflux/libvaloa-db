@@ -5,7 +5,7 @@ libvaloa - database component
 
 Libvaloa is a set of standalone open source utility libraries, which make base for Webvaloa platform. All Libvaloa components aim for quality code, modern design patterns, good documentation and highest possible security. All Libvaloa components are licensed with permissive MIT license.
 
-This package adds minimal abstraction layer for PDO connections. The original design goal of libvaloa-db was to work as drop-in PDO-based replacement for AdoDB query API, but now it offers minimal abstraction for PDO and few utilities for common database tasks. 
+This package adds minimal abstraction layer for PDO connections. 
 
 http://libvaloa.webvaloa.com/
 
@@ -30,7 +30,7 @@ or include libvaloa in your composer.json
 ## Features
 
 - Chainable value setters
-- ...
+- Resultsets as objects
 
 ## Copyright and license
 
@@ -50,6 +50,6 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 Changes are grouped by added, fixed or changed feature.
 
-### [3.0.0] - 2019-03-xx
-- Bumped version requirement to PHP 7.2.
+### [3.0.0] - 2019-04-13
+- Bumped version requirement to PHP 7.2
 - First version separated from Libvaloa. See Libvaloa changelog for earlier changes.
