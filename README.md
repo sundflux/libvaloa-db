@@ -50,6 +50,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 Changes are grouped by added, fixed or changed feature.
 
+### [3.0.1] - 2019-05-13
+- Fix missing exception include in ResultSet.
+
 ### [3.0.0] - 2019-04-13
 - Bumped version requirement to PHP 7.2
 - First version separated from Libvaloa. See Libvaloa changelog for earlier changes.

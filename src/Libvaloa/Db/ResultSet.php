@@ -36,6 +36,7 @@ use PDO;
 use PDOStatement;
 use Iterator;
 use LogicException;
+use Exception;
 use InvalidArgumentException;
 
 class DBException extends Exception { }
