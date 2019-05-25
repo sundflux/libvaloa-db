@@ -38,8 +38,7 @@ use Iterator;
 use LogicException;
 use Exception;
 use InvalidArgumentException;
-
-class DBException extends Exception { }
+use DBException;
 
 /**
  * Class ResultSet
@@ -56,7 +55,7 @@ class ResultSet implements Iterator
 
     /**
      * Results in ResultSet
-     * 
+     *
      * @var int
      */
     private $recordCount = 0;
@@ -138,7 +137,7 @@ class ResultSet implements Iterator
 
     /**
      * Set value for query parameter.
-     * 
+     *
      * @param $value
      * @param bool $key
      * @param PDO::PARAM $type
@@ -160,7 +159,7 @@ class ResultSet implements Iterator
 
     /**
      * Bind value for query parameter.
-     * 
+     *
      * @param $value
      * @param bool $key
      * @param PDO::PARAM $type

@@ -7,39 +7,40 @@ use RuntimeException;
 use DomainException;
 use OutOfBoundsException;
 use LogicException;
+use DBException;
 
 /**
  * Libvaloa Database Component
- * 
- * This package adds minimal abstraction layer for PDO connections. The original 
- * design goal of libvaloa-db was to work as drop-in PDO-based replacement for 
- * AdoDB query API, but now it offers minimal abstraction for PDO and 
- * few utilities for common database tasks. 
- * 
+ *
+ * This package adds minimal abstraction layer for PDO connections. The original
+ * design goal of libvaloa-db was to work as drop-in PDO-based replacement for
+ * AdoDB query API, but now it offers minimal abstraction for PDO and
+ * few utilities for common database tasks.
+ *
  * ---
- * 
+ *
  * Quick start guide:
- * 
+ *
  * <pre>
  * // Initialize DB connection:
  * $db = new \Libvaloa\Db\Db($host, $user, $password, $database, "mysql");
  * </pre>
  *
  * Perform a query:
- *  
+ *
  * <pre>
  * $stmt = $db->prepare("SELECT id, column FROM table");
  * $results = $db->execute();
  * </pre>
- * 
+ *
  * Loop through results:
- * 
+ *
  * <pre>
  * foreach ($results as $row) {
  *     echo $row->column;
  * }
  * </pre>
- * 
+ *
  * ---
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
@@ -59,8 +60,8 @@ use LogicException;
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  * IN THE SOFTWARE.
- * 
- * 
+ *
+ *
  * @package Libvaloa\Db
  * @url https://github.com/sundflux/libvaloa-db
  * @copyright Copyright 2010 - 2019 (c) webvaloa.com
@@ -75,14 +76,14 @@ class Db
      *
      * @var PDO
      */
-    private $conn;
+    private $connection;
 
     /**
      * Amount of not commited/rollbacked transactions started with beginTrans().
      *
      * @var int
      */
-    private $transcnt = 0;
+    private $transactionCount = 0;
 
     /**
      * Number of SQL queries executed.
@@ -91,23 +92,23 @@ class Db
      *
      * @var int
      */
-    public static $querycount = 0;
+    public static $queryCount = 0;
 
     /**
      * Database settings
-     * 
+     *
      * @var array
      */
-    public $properties = array(
+    public $properties = [
         'db_server' => '',
         'db_host' => '',
         'db_user' => '',
         'db_db' => '',
-    );
+    ];
 
     /**
      * Constructor opens connection to database using PDO.
-     * 
+     *
      *
      * @param string $server   SQL server. defaults to localhost
      * @param string $user     Username at SQL server
@@ -126,8 +127,8 @@ class Db
         $database = false,
         $dbconn = 'mysql',
         $pconn = false,
-        $initquery = false)
-    {
+        $initquery = false
+    ) {
         // Alias
         if ($dbconn === 'postgres') {
             $dbconn = 'pgsql';
@@ -151,9 +152,10 @@ class Db
                 $dsn = "mysql:host={$server};dbname={$database}";
                 break;
             case 'sqlite':
-                if (file_exists($database) && !is_readable($database)) {
+                if (!file_exists($database) || !is_readable($database)) {
                     throw new RuntimeException('Selected SQLite database is not readable. Please check your database settings.');
                 }
+                
                 $dsn = "sqlite:{$database}";
                 break;
             case 'pgsql':
@@ -172,37 +174,16 @@ class Db
             $attr[PDO::MYSQL_ATTR_INIT_COMMAND] = $initquery;
         }
 
-        $this->conn = new PDO($dsn, $user, $pass, $attr);
-        $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $this->connection = new PDO($dsn, $user, $pass, $attr);
+        $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         if ($dbconn === 'sqlite') {
-            $this->conn->setAttribute(PDO::ATTR_TIMEOUT, 60);
+            $this->connection->setAttribute(PDO::ATTR_TIMEOUT, 60);
         }
 
         if ($dbconn != 'mysql' && !empty($initquery)) {
             $this->exec($initquery);
         }
-    }
-
-    /**
-     * Class member get overload method.
-     *
-     * Currently supported is transCnt.
-     *
-     *
-     * @param string $k
-     *
-     * @return mixed
-     */
-    public function __get($k)
-    {
-        switch ($k) {
-            case 'transCnt':
-                return $this->transcnt;
-
-        }
-
-        throw new OutOfBoundsException('Program tried to access a non-existant member '.__CLASS__."::{$k}.");
     }
 
     /**
@@ -219,8 +200,8 @@ class Db
     public function execute($query)
     {
         try {
-            $stmt = $this->conn->query($query);
-            self::$querycount++;
+            $stmt = $this->connection->query($query);
+            self::$queryCount++;
 
             return new ResultSet($stmt, true);
         } catch (Exception $e) {
@@ -250,7 +231,7 @@ class Db
         }
 
         try {
-            return new ResultSet($this->conn->prepare($query));
+            return new ResultSet($this->connection->prepare($query));
         } catch (Exception $e) {
             throw new DBException('Preparing SQL query failed.', 0, $e);
         }
@@ -275,8 +256,8 @@ class Db
         }
 
         try {
-            $affected = $this->conn->exec($query);
-            self::$querycount++;
+            $affected = $this->connection->exec($query);
+            self::$queryCount++;
         } catch (Exception $e) {
             throw new DBException('SQL query failed.', 0, $e);
         }
@@ -286,17 +267,17 @@ class Db
 
     /**
      * Return last inserted id.
-     * 
+     *
      * @return string
      */
     public function lastInsertID()
     {
-        if ($this->conn == 'postgres') {
+        if ($this->connection == 'postgres') {
             throw new DBException('lastInsertID not supported with PostgreSQL, please use RETURNING id');
         }
 
         try {
-            return $this->conn->lastInsertID();
+            return $this->connection->lastInsertID();
         } catch (Exception $e) {
             throw new DBException('Unable to retrieve identifier for last insert query.');
         }
@@ -312,7 +293,7 @@ class Db
 
     /**
      * Commit transaction
-     * 
+     *
      * @param bool $commitTransaction
      */
     public function commitTrans($commitTransaction = true)
@@ -337,8 +318,8 @@ class Db
     public function beginTransaction()
     {
         try {
-            $this->conn->beginTransaction();
-            $this->transcnt++;
+            $this->connection->beginTransaction();
+            $this->transactionCount++;
         } catch (Exception $e) {
             throw new RuntimeException('Could not start database transaction.');
         }
@@ -353,17 +334,17 @@ class Db
      */
     public function commit($commitTransaction = true)
     {
-        if ($this->transcnt < 1) {
+        if ($this->transactionCount < 1) {
             return;
         }
 
         try {
             if (!$commitTransaction) {
-                $this->conn->rollBack();
+                $this->connection->rollBack();
             } else {
-                $this->conn->commit();
+                $this->connection->commit();
             }
-            $this->transcnt--;
+            $this->transactionCount--;
         } catch (Exception $e) {
             throw new RuntimeException('Could not commit database transaction.');
         }
@@ -371,19 +352,19 @@ class Db
 
     /**
      * Cancels transaction started with beginTrans().
-     * 
+     *
      * @uses RuntimeException
      * @uses LogicException
      */
     public function rollBack()
     {
-        if ($this->transcnt < 1) {
+        if ($this->transactionCount < 1) {
             throw new LogicException('Program attempted to cancel transaction without starting one.');
         }
 
         try {
-            $this->conn->rollBack();
-            $this->transcnt--;
+            $this->connection->rollBack();
+            $this->transactionCount--;
         } catch (Exception $e) {
             throw new RuntimeException('Could not roll back database transaction.');
         }

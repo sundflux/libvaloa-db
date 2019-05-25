@@ -36,6 +36,7 @@ use stdClass;
 use InvalidArgumentException;
 use OutOfBoundsException;
 use RuntimeException;
+use DBException;
 
 /**
  * Class Object
@@ -45,42 +46,42 @@ class Item
 {
     /**
      * Database connection
-     * 
+     *
      * @var \Libvaloa\Db\Db
      */
     private $db;
 
     /**
      * Target database table
-     * 
+     *
      * @var string
      */
     private $table;
 
     /**
      * Target primary key field in table
-     * 
+     *
      * @var string
      */
     private $primaryKey = 'id';
 
     /**
      * Data object for table row
-     * 
+     *
      * @var stdClass
      */
     private $object;
 
     /**
      * Track if anything was modified
-     * 
+     *
      * @var bool
      */
     private $modified = false;
 
     /**
      * Columns in table row
-     * 
+     *
      * @var bool
      */
     private $columns = false;
@@ -123,7 +124,7 @@ class Item
 
     /**
      * Get primary key column name.
-     * 
+     *
      * @return string
      */
     public function getPrimaryKeyColumn() : string
@@ -144,7 +145,7 @@ class Item
 
     /**
      * Returns list of table columns as array.
-     * 
+     *
      * @return array
      */
     private function getColumns() : array
@@ -184,7 +185,7 @@ class Item
 
     /**
      * Get field value from row object
-     * 
+     *
      * @param $field
      * @return null|string
      */
@@ -199,7 +200,7 @@ class Item
 
     /**
      * Set field value to row object.
-     * 
+     *
      * @param $key
      * @param $value
      */
@@ -221,7 +222,7 @@ class Item
 
     /**
      * Load database row by id.
-     * 
+     *
      * @param $id
      */
     public function byID(int $id) : int

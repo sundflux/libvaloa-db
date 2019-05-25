@@ -3,9 +3,13 @@ libvaloa - database component
 
 [![webvaloa](https://github.com/sundflux/libvaloa/blob/master/.vendor.png)](https://github.com/sundflux/libvaloa/blob/master/.vendor.png)
 
-Libvaloa is a set of standalone open source utility libraries, which make base for Webvaloa platform. All Libvaloa components aim for quality code, modern design patterns, good documentation and highest possible security. All Libvaloa components are licensed with permissive MIT license.
+Libvaloa is a set of standalone open source utility libraries, which make base for Webvaloa platform. 
 
-This package adds minimal abstraction layer for PDO connections. 
+Libvaloa components aim for top-tier code quality, security and modern design patterns. 
+
+All Libvaloa components are licensed with permissive MIT license.
+
+This package adds minimal abstraction layer for PDO connections.
 
 http://libvaloa.webvaloa.com/
 
@@ -49,6 +53,9 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 Changes are grouped by added, fixed or changed feature.
+
+### [3.0.2] - 2019-05-25
+- Code and documentation cleanups.
 
 ### [3.0.1] - 2019-05-13
 - Fix missing exception include in ResultSet.
