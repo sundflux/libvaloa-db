@@ -250,7 +250,7 @@ class Item
     public function save() : int
     {
         if ($this->modified === false) {
-            return;
+            return -1;
         }
 
         if (!isset($this->object->{$this->primaryKey})) {
