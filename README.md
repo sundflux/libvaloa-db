@@ -29,12 +29,13 @@ or include libvaloa in your composer.json
 
 ## Requirements
 
-- PHP 7.2
+- PHP 7.2.19
 
 ## Features
 
 - Chainable value setters
 - Resultsets as objects
+- Generate table models from yaml configs
 
 ## Copyright and license
 
@@ -53,6 +54,11 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 Changes are grouped by added, fixed or changed feature.
+
+### [3.1.0] - 2019-09-01
+- Small cleanups, doctag updates.
+- Add \Model\Table for generating table schemas from yaml configs.
+- Remove generate_documentation.sh (helper script for phpdoc)
 
 ### [3.0.2] - 2019-05-25
 - Code and documentation cleanups.

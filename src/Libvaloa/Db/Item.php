@@ -33,9 +33,7 @@
 namespace Libvaloa\Db;
 
 use stdClass;
-use InvalidArgumentException;
 use OutOfBoundsException;
-use RuntimeException;
 use DBException;
 
 /**
@@ -89,8 +87,10 @@ class Item
     /**
      * Constructor - give the name of the target table.
      *
-     * @param string $table Target table
-     * @param string $dbconn Database connection object
+     * @param Db $dbconn
+     * @param string $table
+     * @param int $id
+     * @throws \Libvaloa\Db\DBException
      */
     public function __construct(\Libvaloa\Db\Db $dbconn, string $table, int $id = -1)
     {
@@ -147,6 +147,7 @@ class Item
      * Returns list of table columns as array.
      *
      * @return array
+     * @throws \Libvaloa\Db\DBException
      */
     private function getColumns() : array
     {
@@ -223,7 +224,9 @@ class Item
     /**
      * Load database row by id.
      *
-     * @param $id
+     * @param int $id
+     * @return int
+     * @throws \Libvaloa\Db\DBException
      */
     public function byID(int $id) : int
     {
