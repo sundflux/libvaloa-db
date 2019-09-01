@@ -204,7 +204,7 @@ class ResultSet implements Iterator
             } catch (Exception $e) {
                 throw new DBException('Executing a prepared query failed.', 0, $e);
             }
-            DB::$querycount++;
+            DB::$queryCount++;
         } else {
             throw new DBException('Program attempted to execute query twice.');
         }

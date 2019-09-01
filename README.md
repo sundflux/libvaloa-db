@@ -55,6 +55,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 Changes are grouped by added, fixed or changed feature.
 
+### [3.1.1] - 2019-09-01
+- Hotfix, fix queryCount capitalization.
+
 ### [3.1.0] - 2019-09-01
 - Small cleanups, doctag updates.
 - Add \Model\Table for generating table schemas from yaml configs.
