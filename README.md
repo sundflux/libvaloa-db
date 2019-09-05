@@ -55,6 +55,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 Changes are grouped by added, fixed or changed feature.
 
+### [3.0.5] - 2019-09-05
+- Fix exception throwing in ResultSet.
+- Debug print out failed prepared query.
+
 ### [3.0.5] - 2019-09-01
 - Versioning fixes.
 

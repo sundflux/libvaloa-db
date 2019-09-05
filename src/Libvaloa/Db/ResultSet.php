@@ -38,7 +38,6 @@ use Iterator;
 use LogicException;
 use Exception;
 use InvalidArgumentException;
-use DBException;
 
 /**
  * Class ResultSet
@@ -202,11 +201,11 @@ class ResultSet implements Iterator
                 $this->recordCount = count($this->rows);
                 $this->column = 1;
             } catch (Exception $e) {
-                throw new DBException('Executing a prepared query failed.', 0, $e);
+                throw new \Libvaloa\Db\DBException('Executing a prepared query failed: '.$this->stmt->queryString);
             }
             DB::$queryCount++;
         } else {
-            throw new DBException('Program attempted to execute query twice.');
+            throw new \Libvaloa\Db\DBException('Program attempted to execute query twice.');
         }
 
         return $this;
