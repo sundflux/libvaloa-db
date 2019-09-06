@@ -171,7 +171,7 @@ class Item
 
                     // Set primary key if found
                     if ($row->column_key == 'PRI') {
-                        $this->setPrimaryKey($row->column_name);
+                        $this->setPrimaryKeyColumn($row->column_name);
                     }
                 }
 
