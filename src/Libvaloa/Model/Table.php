@@ -48,7 +48,8 @@ class Table
     private $schema;
 
     /**
-     * 
+     * Table constructor.
+     * @param $model
      */
     public function __construct($model)
     {
@@ -56,7 +57,7 @@ class Table
     }
 
     /**
-     * 
+     * @return int|string|null
      */
     private function parseTableFromModel()
     {
@@ -69,7 +70,7 @@ class Table
     }
 
     /**
-     * 
+     *
      */
     private function parseFieldsFromModel()
     {
