@@ -92,7 +92,7 @@ class Columns
      * @param string $key
      * @return string
      */
-    private function setPrimaryKeyColumn(string $key) : string
+    private function setPrimaryKeyColumn(string $key)
     {
         $this->primaryKey = $key;
     }
