@@ -55,6 +55,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 Changes are grouped by added, fixed or changed feature.
 
+### [3.0.9] - 2019-09-11
+- Separate Db\Column from Db\Item. 
+
 ### [3.0.8] - 2019-09-08
 - Adds better debugging for Exception cases so Whoops error page gets some useful information.
 

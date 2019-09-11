@@ -78,11 +78,9 @@ class Item
     private $modified = false;
 
     /**
-     * Columns in table row
-     *
-     * @var bool
+     * @var Columns
      */
-    private $columns = false;
+    private $columns;
 
     /**
      * Constructor - give the name of the target table.
@@ -104,22 +102,13 @@ class Item
         $this->db = $dbconn;
 
         // Get and set columns from target table
-        $this->setColumns($this->getColumns());
+        $this->columns = new Columns($dbconn, $table);
+        $this->object = (object) $this->columns->getColumns();
 
         // Load object if id was given
         if ($id > 0) {
             $this->byID($id);
         }
-    }
-
-    /**
-     * Set primary key field, defaults to id.
-     *
-     * @param string $key Primary key field
-     */
-    public function setPrimaryKeyColumn(string $key)
-    {
-        $this->primaryKey = $key;
     }
 
     /**
@@ -129,59 +118,15 @@ class Item
      */
     public function getPrimaryKeyColumn() : string
     {
-        return $this->primaryKey;
+        return $this->columns->getPrimaryKeyColumn();
     }
 
     /**
-     * Set columns in target table. Only names set in $columns array will
-     * be included in the query.
-     *
-     * @param array $columns Table columns as array
-     */
-    public function setColumns(array $columns)
-    {
-        $this->object = (object) $columns;
-    }
-
-    /**
-     * Returns list of table columns as array.
-     *
      * @return array
-     * @throws \Libvaloa\Db\DBException
      */
     private function getColumns() : array
     {
-        // Detect columns
-        switch ($this->db->properties['db_server']) {
-            default:
-                // MySQL / MariaDB:
-                $query = '
-                    SELECT column_name, data_type, column_key
-                    FROM information_schema.columns
-                    WHERE table_name = ?
-                    AND table_schema = ?';
-
-                $stmt = $this->db->prepare($query);
-                $stmt->set($this->table);
-                $stmt->set($this->db->properties['db_db']);
-                $stmt->execute();
-
-                foreach ($stmt as $row) {
-                    $columns[$row->column_name] = null;
-
-                    // Set primary key if found
-                    if ($row->column_key == 'PRI') {
-                        $this->setPrimaryKeyColumn($row->column_name);
-                    }
-                }
-
-                if (isset($columns)) {
-                    return $columns;
-                } else {
-                    return [];
-                }
-            break;
-        }
+        return $this->columns->getColumns();
     }
 
     /**
