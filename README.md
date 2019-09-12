@@ -55,6 +55,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 Changes are grouped by added, fixed or changed feature.
 
+### [3.0.12] - 2019-09-12
+- Change default ON DELETE to RESTRICT.
+- Add setter for primaryKey.
+
 ### [3.0.11] - 2019-09-12
 - Add Db\Constraints for generating foreign keys automatically. Works when primary keys are named "id" and referenced columns like "tablename_id".
 

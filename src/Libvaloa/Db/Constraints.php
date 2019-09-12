@@ -88,6 +88,14 @@ class Constraints
     }
 
     /**
+     * @param $column
+     */
+    public function setPrimaryKeyColumn(string $column)
+    {
+        $this->primaryKeyColumn = $column;
+    }
+
+    /**
      * @return array
      * @throws DBException
      */
@@ -96,7 +104,7 @@ class Constraints
         $columns = new Columns($this->db, $this->table);
         $this->columns = $columns->getColumns();
 
-        $lookup = "_id";
+        $lookup = "_{$this->primaryKeyColumn}";
         foreach ($this->columns as $column => $v) {
             if (strpos($column, $lookup) !== false) {
                 $table = substr($column, 0, -3);
@@ -136,7 +144,7 @@ class Constraints
                 ALTER TABLE `{$this->table}`
                 ADD FOREIGN KEY (`{$cnst}_{$this->primaryKeyColumn}`) 
                 REFERENCES `{$cnst}` (`{$this->primaryKeyColumn}`)
-                ON DELETE CASCADE 
+                ON DELETE RESTRICT 
                 ON UPDATE RESTRICT ";
 
             try {
