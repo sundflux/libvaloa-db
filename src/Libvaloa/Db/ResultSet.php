@@ -201,19 +201,6 @@ class ResultSet implements Iterator
                 $this->recordCount = count($this->rows);
                 $this->column = 1;
             } catch (Exception $e) {
-                if (error_reporting() == E_ALL) {
-                    // debugDumpParams just blindly prints everything out so catch
-                    // output with ob (ugh-ly)
-                    ob_start();
-                    $this->stmt->debugDumpParams();
-                    $pdoDebugValues = ob_get_contents();
-                    ob_end_flush();
-
-                    $_ENV['LIBVALOA_DB_DEBUG_STMT'] = print_r($this->stmt, true);
-                    $_ENV['LIBVALOA_DB_DEBUG_QUERY'] = $this->stmt->queryString;
-                    $_ENV['LIBVALOA_DB_DEBUG_DUMP'] = $pdoDebugValues;
-                }
-
                 throw new \Libvaloa\Db\DBException('Executing a prepared query failed.');
             }
             DB::$queryCount++;
