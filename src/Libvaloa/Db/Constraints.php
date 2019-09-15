@@ -191,4 +191,26 @@ class Constraints
         return $foundConstraint;
     }
 
+    /**
+     * @return array
+     */
+    public function getReferences() : array
+    {
+        $query = "
+            SELECT COLUMN_NAME, TABLE_NAME
+            FROM information_schema.KEY_COLUMN_USAGE
+            WHERE REFERENCED_TABLE_NAME = ?";
+
+        $stmt = $this->db->prepare($query);
+        $stmt->set($this->table);
+        $stmt->execute();
+
+        $references = [];
+        foreach ($stmt as $k => $v) {
+            $references[] = $v->TABLE_NAME.'.'.$v->COLUMN_NAME;
+        }
+
+        return $references;
+    }
+
 }
